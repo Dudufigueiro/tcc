@@ -1,0 +1,158 @@
+/* Estilos globais da aplicação */
+:root {
+  --app-bg: #f3f5f9;
+  --app-border: #dfe5ee;
+  --app-muted: #5b6676;
+  --app-radius: 12px;
+}
+
+body {
+  background: var(--app-bg);
+  color: #1d2733;
+}
+
+/* ---------- Estrutura de página ---------- */
+.page {
+  padding: 22px 28px 48px;
+  max-width: 1320px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 18px;
+}
+
+.page-title {
+  font-size: 1.55rem;
+  line-height: 1.2;
+  font-weight: 600;
+  margin: 0;
+  color: #16324f;
+}
+
+.page-subtitle {
+  margin: 4px 0 0;
+  color: var(--app-muted);
+  font-size: 0.95rem;
+}
+
+.card-flat {
+  background: #fff;
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+  box-shadow: none;
+}
+
+.section-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 12px;
+  color: #16324f;
+}
+
+.text-muted {
+  color: var(--app-muted);
+}
+
+/* ---------- Cartões de indicador ---------- */
+.stat-card {
+  padding: 16px 18px;
+  height: 100%;
+}
+
+.stat-card .stat-label {
+  font-size: 0.82rem;
+  color: var(--app-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.stat-card .stat-value {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.15;
+  margin-top: 4px;
+}
+
+.stat-card .stat-hint {
+  font-size: 0.85rem;
+  color: var(--app-muted);
+  margin-top: 2px;
+}
+
+/* ---------- Cartões de vaga (professor) ---------- */
+.vaga-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 16px;
+}
+
+.vaga-card {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.15s;
+}
+
+.vaga-card:hover {
+  border-color: #b7c4d8;
+}
+
+.vaga-card.vaga-minha {
+  border-color: var(--q-secondary);
+  box-shadow: inset 4px 0 0 var(--q-secondary);
+}
+
+.vaga-card .vaga-titulo {
+  font-size: 1.08rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* ---------- Tabelas ---------- */
+.q-table th {
+  font-weight: 600;
+  color: #16324f;
+}
+
+.cell-wrap {
+  white-space: normal;
+}
+
+/* ---------- Impressão (relatório) ---------- */
+@media print {
+  .no-print,
+  .q-header,
+  .q-drawer,
+  .q-drawer-container {
+    display: none !important;
+  }
+
+  .q-page-container {
+    padding: 0 !important;
+  }
+
+  .page {
+    padding: 0;
+    max-width: none;
+  }
+
+  body {
+    background: #fff;
+  }
+
+  .card-flat {
+    border-color: #999;
+  }
+}
+
+@media (max-width: 599px) {
+  .page {
+    padding: 14px 12px 40px;
+  }
+
+  .page-title {
+    font-size: 1.3rem;
+  }
+}
