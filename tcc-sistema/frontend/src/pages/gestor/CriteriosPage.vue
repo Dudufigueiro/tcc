@@ -5,7 +5,7 @@
       subtitle="Usados para organizar os professores quando há interesse na mesma vaga."
     />
 
-    <q-banner rounded class="bg-blue-1 text-primary q-mb-md">
+    <q-banner rounded class="bg-grey-2 text-primary q-mb-md">
       Os critérios <b>ativos</b> são aplicados na ordem indicada (1 = primeiro). Em caso de empate
       no primeiro critério, vale o segundo, e assim por diante. O sistema apenas
       <b>organiza e sinaliza</b> a ordem: a decisão final é sempre do gestor.

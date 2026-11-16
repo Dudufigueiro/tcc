@@ -132,7 +132,7 @@
 
       <!-- ===================== DISPUTAS ===================== -->
       <q-tab-panel name="disputas" class="q-pa-none">
-        <q-banner rounded class="bg-blue-1 text-primary q-mb-md">
+        <q-banner rounded class="bg-grey-2 text-primary q-mb-md">
           <template #avatar><q-icon name="info" /></template>
           Quando mais de um professor tem interesse na mesma vaga, os candidatos são
           <b>ordenados</b> pelos critérios ativos<span v-if="criteriosAtivos.length"

@@ -13,4 +13,14 @@ const solicitarCadastro = z.object({
   data_chegada_unidade: z.iso.date().optional(),
 });
 
-module.exports = { login, solicitarCadastro };
+const alterarEmail = z.object({
+  email: z.email().max(150),
+  senha_atual: z.string().min(1),
+});
+
+const alterarSenha = z.object({
+  senha_atual: z.string().min(1),
+  nova_senha: z.string().min(6).max(72),
+});
+
+module.exports = { login, solicitarCadastro, alterarEmail, alterarSenha };

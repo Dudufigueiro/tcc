@@ -11,7 +11,7 @@ export default defineConfig((/* ctx */) => {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['axios'],
+    boot: ['axios', 'select-menu'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#css
     css: ['app.css'],
@@ -89,13 +89,13 @@ export default defineConfig((/* ctx */) => {
       lang: 'pt-BR',
       config: {
         brand: {
-          primary: '#1f4e79', // azul (gestor)
+          primary: '#2b2e32', // preto/cinza do menu lateral
           secondary: '#2e7d52', // verde (professor)
           accent: '#c8602b', // laranja (sistema)
           positive: '#2e7d52',
           negative: '#c0392b',
           warning: '#e0a100',
-          info: '#2f80c4',
+          info: '#5f656c',
         },
         notify: { position: 'top-right', timeout: 4000 },
       },

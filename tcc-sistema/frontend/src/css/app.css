@@ -27,7 +27,7 @@ body {
   line-height: 1.2;
   font-weight: 600;
   margin: 0;
-  color: #16324f;
+  color: #2b2e32;
 }
 
 .page-subtitle {
@@ -47,7 +47,7 @@ body {
   font-size: 1.05rem;
   font-weight: 600;
   margin: 0 0 12px;
-  color: #16324f;
+  color: #2b2e32;
 }
 
 .text-muted {
@@ -96,7 +96,7 @@ body {
 }
 
 .vaga-card:hover {
-  border-color: #b7c4d8;
+  border-color: #cfd3d8;
 }
 
 .vaga-card.vaga-minha {
@@ -113,7 +113,7 @@ body {
 /* ---------- Tabelas ---------- */
 .q-table th {
   font-weight: 600;
-  color: #16324f;
+  color: #2b2e32;
 }
 
 .cell-wrap {

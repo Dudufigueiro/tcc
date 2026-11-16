@@ -16,4 +16,14 @@ async function me(req, res) {
   res.json({ usuario: await authService.carregarUsuarioPublico(req.user.id) });
 }
 
-module.exports = { login, solicitarCadastro, me };
+async function alterarEmail(req, res) {
+  const usuario = await authService.alterarEmail(req.user.id, req.valid.body);
+  res.json({ mensagem: 'E-mail atualizado com sucesso.', usuario });
+}
+
+async function alterarSenha(req, res) {
+  await authService.alterarSenha(req.user.id, req.valid.body);
+  res.json({ mensagem: 'Senha alterada com sucesso.' });
+}
+
+module.exports = { login, solicitarCadastro, me, alterarEmail, alterarSenha };

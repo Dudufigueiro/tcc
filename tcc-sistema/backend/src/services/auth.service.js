@@ -77,4 +77,43 @@ async function solicitarCadastro({ nome, email, senha, matricula, data_chegada_u
   return carregarUsuarioPublico(usuarioId);
 }
 
-module.exports = { login, solicitarCadastro, carregarUsuarioPublico, BCRYPT_ROUNDS };
+/**
+ * Confere a senha atual do usuário logado. Usa 422 (e não 401) para que uma senha digitada
+ * errada não derrube a sessão no frontend.
+ */
+async function conferirSenhaAtual(usuarioId, senhaAtual) {
+  const { rows } = await query('SELECT senha_hash FROM usuario WHERE id = $1', [usuarioId]);
+  if (!rows[0]) throw AppError.notFound('Usuário não encontrado.');
+  const confere = await bcrypt.compare(senhaAtual, rows[0].senha_hash);
+  if (!confere) {
+    throw AppError.unprocessable('Senha atual incorreta.', { code: 'SENHA_ATUAL_INCORRETA' });
+  }
+}
+
+/** Troca o e-mail do próprio usuário (exige a senha atual). */
+async function alterarEmail(usuarioId, { email, senha_atual }) {
+  await conferirSenhaAtual(usuarioId, senha_atual);
+  await query('UPDATE usuario SET email = $1 WHERE id = $2', [email.trim(), usuarioId]);
+  return carregarUsuarioPublico(usuarioId);
+}
+
+/** Troca a senha do próprio usuário (exige a senha atual). */
+async function alterarSenha(usuarioId, { senha_atual, nova_senha }) {
+  await conferirSenhaAtual(usuarioId, senha_atual);
+  if (senha_atual === nova_senha) {
+    throw AppError.unprocessable('A nova senha deve ser diferente da senha atual.', {
+      code: 'SENHA_IGUAL',
+    });
+  }
+  const senhaHash = await bcrypt.hash(nova_senha, BCRYPT_ROUNDS);
+  await query('UPDATE usuario SET senha_hash = $1 WHERE id = $2', [senhaHash, usuarioId]);
+}
+
+module.exports = {
+  login,
+  solicitarCadastro,
+  carregarUsuarioPublico,
+  alterarEmail,
+  alterarSenha,
+  BCRYPT_ROUNDS,
+};

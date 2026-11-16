@@ -10,4 +10,11 @@ export const authService = {
   async me() {
     return (await api.get('/auth/me')).data
   },
+  async alterarEmail(email, senhaAtual) {
+    return (await api.patch('/auth/me/email', { email, senha_atual: senhaAtual })).data
+  },
+  async alterarSenha(senhaAtual, novaSenha) {
+    return (await api.patch('/auth/me/senha', { senha_atual: senhaAtual, nova_senha: novaSenha }))
+      .data
+  },
 }

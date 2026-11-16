@@ -19,5 +19,8 @@ const limitador = rateLimit({
 router.post('/login', limitador, validate(schemas.login), controller.login);
 router.post('/solicitar-cadastro', limitador, validate(schemas.solicitarCadastro), controller.solicitarCadastro);
 router.get('/me', authenticate, controller.me);
+// troca de e-mail e de senha do próprio usuário (exigem a senha atual)
+router.patch('/me/email', authenticate, limitador, validate(schemas.alterarEmail), controller.alterarEmail);
+router.patch('/me/senha', authenticate, limitador, validate(schemas.alterarSenha), controller.alterarSenha);
 
 module.exports = router;

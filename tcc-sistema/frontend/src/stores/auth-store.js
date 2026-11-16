@@ -53,6 +53,12 @@ export const useAuthStore = defineStore('auth', {
       gravarSessao({ token: this.token, usuario })
     },
 
+    /** Atualiza o usuário da sessão (ex.: após trocar o e-mail). */
+    definirUsuario(usuario) {
+      this.usuario = usuario
+      gravarSessao({ token: this.token, usuario })
+    },
+
     logout() {
       this.token = null
       this.usuario = null

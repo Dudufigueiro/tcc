@@ -19,7 +19,7 @@
     <template v-if="dados">
       <!-- Indicadores -->
       <div class="row q-col-gutter-md q-mb-md">
-        <div class="col-6 col-md-3">
+        <div class="col-12 col-sm-6 col-md-4">
           <div class="card-flat stat-card">
             <div class="stat-label">Cadastros pendentes</div>
             <div class="stat-value" :class="dados.professores.pendentes ? 'text-warning' : ''">
@@ -38,7 +38,7 @@
             />
           </div>
         </div>
-        <div class="col-6 col-md-3">
+        <div class="col-12 col-sm-6 col-md-4">
           <div class="card-flat stat-card">
             <div class="stat-label">Vagas preenchidas</div>
             <div class="stat-value">
@@ -55,24 +55,7 @@
             <div class="stat-hint">{{ dados.vagas.livres }} livre(s)</div>
           </div>
         </div>
-        <div class="col-6 col-md-3">
-          <div class="card-flat stat-card">
-            <div class="stat-label">Aulas atribuídas</div>
-            <div class="stat-value">
-              {{ dados.vagas.aulas_atribuidas
-              }}<span class="text-muted text-h6"> / {{ dados.vagas.aulas_total }}</span>
-            </div>
-            <q-linear-progress
-              :value="razao(dados.vagas.aulas_atribuidas, dados.vagas.aulas_total)"
-              rounded
-              color="primary"
-              track-color="grey-3"
-              class="q-mt-sm"
-            />
-            <div class="stat-hint">{{ dados.escolhas.confirmadas }} escolha(s) confirmada(s)</div>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
+        <div class="col-12 col-sm-6 col-md-4">
           <div class="card-flat stat-card">
             <div class="stat-label">Vagas em disputa</div>
             <div class="stat-value" :class="dados.vagas.em_disputa ? 'text-warning' : ''">
@@ -95,11 +78,21 @@
         </div>
       </div>
 
-      <div class="row q-col-gutter-md">
+      <div class="painel-linha">
         <!-- Carga por professor -->
-        <div class="col-12 col-lg-7">
-          <div class="card-flat q-pa-md">
+        <div class="card-flat q-pa-md carga-card">
+          <div class="row items-center justify-between">
             <h2 class="section-title">Carga horária dos professores</h2>
+            <q-btn
+              flat
+              dense
+              no-caps
+              color="primary"
+              label="Ver professores"
+              to="/gestor/professores"
+            />
+          </div>
+          <div class="carga-lista">
             <div v-if="!dados.carga_professores.length" class="text-muted">
               Nenhum professor aprovado ainda.
             </div>
@@ -124,37 +117,35 @@
         </div>
 
         <!-- Últimas alterações -->
-        <div class="col-12 col-lg-5">
-          <div class="card-flat q-pa-md">
-            <div class="row items-center justify-between">
-              <h2 class="section-title">Últimas alterações</h2>
-              <q-btn
-                flat
-                dense
-                no-caps
-                color="primary"
-                label="Ver histórico"
-                to="/gestor/historico"
-              />
-            </div>
-            <div v-if="!dados.ultimas_alteracoes.length" class="text-muted">
-              Ainda não há alterações.
-            </div>
-            <q-list separator>
-              <q-item v-for="h in dados.ultimas_alteracoes" :key="h.id" class="q-px-none">
-                <q-item-section>
-                  <q-item-label>{{ ACAO_HISTORICO[h.acao] ?? h.acao }}</q-item-label>
-                  <q-item-label caption lines="2">
-                    {{ h.professor_nome }} · {{ h.disciplina_nome }} ({{ h.serie }}
-                    {{ h.identificacao }})
-                  </q-item-label>
-                  <q-item-label caption
-                    >por {{ h.usuario_nome }} · {{ formatarDataHora(h.data_hora) }}</q-item-label
-                  >
-                </q-item-section>
-              </q-item>
-            </q-list>
+        <div class="card-flat q-pa-md historico-card">
+          <div class="row items-center justify-between">
+            <h2 class="section-title">Últimas alterações</h2>
+            <q-btn
+              flat
+              dense
+              no-caps
+              color="primary"
+              label="Ver histórico"
+              to="/gestor/historico"
+            />
           </div>
+          <div v-if="!dados.ultimas_alteracoes.length" class="text-muted">
+            Ainda não há alterações.
+          </div>
+          <q-list separator>
+            <q-item v-for="h in dados.ultimas_alteracoes" :key="h.id" class="q-px-none">
+              <q-item-section>
+                <q-item-label>{{ ACAO_HISTORICO[h.acao] ?? h.acao }}</q-item-label>
+                <q-item-label caption lines="2">
+                  {{ h.professor_nome }} · {{ h.disciplina_nome }} ({{ h.serie }}
+                  {{ h.identificacao }})
+                </q-item-label>
+                <q-item-label caption
+                  >por {{ h.usuario_nome }} · {{ formatarDataHora(h.data_hora) }}</q-item-label
+                >
+              </q-item-section>
+            </q-item>
+          </q-list>
         </div>
       </div>
     </template>
@@ -189,3 +180,46 @@ async function carregar() {
 
 watch(ano, carregar)
 </script>
+
+<style scoped>
+.painel-linha {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.carga-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.carga-lista {
+  flex: 1;
+  min-height: 0;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.historico-card {
+  min-height: 340px;
+}
+
+/* Em telas largas, o card de carga acompanha a altura do card de alterações
+   e a lista de professores rola dentro dele. */
+@media (min-width: 1024px) {
+  .painel-linha {
+    grid-template-columns: 7fr 5fr;
+  }
+
+  .carga-card {
+    height: 0;
+    min-height: 100%;
+  }
+
+  .carga-lista {
+    max-height: none;
+  }
+}
+</style>

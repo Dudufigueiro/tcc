@@ -67,15 +67,45 @@
 
         <div class="menu-usuario">
           <div
-            class="row no-wrap items-center q-mb-sm"
+            class="menu-usuario-conta row no-wrap items-center q-mb-sm"
             :class="{ 'justify-center': mini }"
-            :title="`${auth.usuario?.nome} (${perfilLabel})`"
+            :title="`${auth.usuario?.nome} (${perfilLabel}) · Minha conta`"
           >
             <div class="menu-avatar" aria-hidden="true">{{ iniciais }}</div>
             <div v-if="!mini" class="menu-usuario-nome">
               {{ auth.usuario?.nome }}
               <span class="menu-usuario-perfil">({{ perfilLabel }})</span>
             </div>
+            <q-icon v-if="!mini" name="o_unfold_more" size="18px" class="menu-usuario-seta" />
+
+            <q-menu
+              :anchor="mini ? 'top right' : 'top left'"
+              self="bottom left"
+              :offset="mini ? [8, 0] : [0, 8]"
+              :fit="!mini"
+              class="menu-conta"
+              auto-close
+            >
+              <div class="menu-conta-cabecalho">
+                <div class="menu-conta-titulo">Minha conta</div>
+                <div class="menu-conta-email">{{ auth.usuario?.email }}</div>
+              </div>
+              <q-separator dark />
+              <q-list dense padding class="menu-conta-lista" style="min-width: 220px">
+                <q-item clickable v-ripple @click="abrirConta('email')">
+                  <q-item-section avatar>
+                    <q-icon name="o_mail" size="18px" />
+                  </q-item-section>
+                  <q-item-section>Alterar e-mail</q-item-section>
+                </q-item>
+                <q-item clickable v-ripple @click="abrirConta('senha')">
+                  <q-item-section avatar>
+                    <q-icon name="o_lock" size="18px" />
+                  </q-item-section>
+                  <q-item-section>Alterar senha</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
           </div>
           <q-btn
             v-if="!mini"
@@ -106,6 +136,8 @@
     <q-page-container :class="{ 'menu-fechado': !desktop && !menuAberto }">
       <router-view />
     </q-page-container>
+
+    <ContaDialog v-model="contaAberta" :aba-inicial="abaConta" />
   </q-layout>
 </template>
 
@@ -114,6 +146,7 @@ import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
 import { useAuthStore } from '@/stores/auth-store'
+import ContaDialog from '@/components/ContaDialog.vue'
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -171,6 +204,14 @@ const menuGestor = [
 
 const menu = computed(() => (auth.isGestor ? menuGestor : menuProfessor))
 
+const contaAberta = ref(false)
+const abaConta = ref('email')
+
+function abrirConta(aba) {
+  abaConta.value = aba
+  contaAberta.value = true
+}
+
 function sair() {
   auth.logout()
   router.push('/login')
@@ -217,7 +258,24 @@ function sair() {
   text-align: center;
 }
 
-.menu-mini .menu-avatar {
+.menu-mini .menu-usuario-conta {
+  margin-left: -6px;
+  margin-right: -6px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.menu-usuario-conta:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.menu-usuario-seta {
+  margin-left: auto;
+  color: #7f868e;
+}
+
+.menu-avatar {
   margin-right: 0;
 }
 
@@ -292,14 +350,14 @@ function sair() {
 }
 
 .menu-item.menu-ativo {
-  background: #e8eef5;
-  border-left-color: #1f4e79;
-  color: #1f4e79;
+  background: #eceef0;
+  border-left-color: #6b7178;
+  color: #2b2e32;
   font-weight: 600;
 }
 
 .menu-item.menu-ativo .menu-icone {
-  color: #1f4e79;
+  color: #2b2e32;
 }
 
 .menu-item.menu-ativo .q-focus-helper {
@@ -354,5 +412,46 @@ function sair() {
 
 .menu-sair:hover {
   background: rgba(255, 255, 255, 0.07);
+}
+
+.menu-conta {
+  background: #33373c;
+  color: #f1f3f5;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.menu-conta-cabecalho {
+  padding: 12px 16px 10px;
+}
+
+.menu-conta-titulo {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #f1f3f5;
+}
+
+.menu-conta-email {
+  margin-top: 2px;
+  font-size: 0.74rem;
+  color: #98a0a8;
+  overflow-wrap: anywhere;
+}
+
+.menu-conta-lista .q-item {
+  min-height: 36px;
+  font-size: 0.8rem;
+  color: #dfe2e6;
+}
+
+.menu-conta-lista .q-item__section--avatar {
+  min-width: 32px;
+  color: #98a0a8;
+}
+
+.menu-conta-lista .q-item:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 </style>

@@ -28,21 +28,26 @@ async function resumo({ ano_letivo } = {}) {
         WHERE t.ano_letivo = $1 GROUP BY e.status`,
       [ano],
     ),
+    // os 5 professores com maior carga horária livre (regime - aulas já atribuídas)
     query(
-      `SELECT p.id, u.nome, p.matricula, p.regime_carga_horaria AS regime,
-              COALESCE(SUM(v.quantidade_aulas) FILTER (WHERE e.status = 'CONFIRMADA' AND t.ano_letivo = $1), 0)::int AS utilizada
-         FROM professor p
-         JOIN usuario u ON u.id = p.usuario_id
-         LEFT JOIN escolha e ON e.professor_id = p.id
-         LEFT JOIN vaga v ON v.id = e.vaga_id
-         LEFT JOIN turma t ON t.id = v.turma_id
-        WHERE p.status_cadastro = 'APROVADO'
-        GROUP BY p.id, u.nome, p.matricula, p.regime_carga_horaria
-        ORDER BY u.nome`,
+      `SELECT c.*
+         FROM (
+           SELECT p.id, u.nome, p.matricula, p.regime_carga_horaria AS regime,
+                  COALESCE(SUM(v.quantidade_aulas) FILTER (WHERE e.status = 'CONFIRMADA' AND t.ano_letivo = $1), 0)::int AS utilizada
+             FROM professor p
+             JOIN usuario u ON u.id = p.usuario_id
+             LEFT JOIN escolha e ON e.professor_id = p.id
+             LEFT JOIN vaga v ON v.id = e.vaga_id
+             LEFT JOIN turma t ON t.id = v.turma_id
+            WHERE p.status_cadastro = 'APROVADO'
+            GROUP BY p.id, u.nome, p.matricula, p.regime_carga_horaria
+         ) c
+        ORDER BY (c.regime - c.utilizada) DESC, c.nome
+        LIMIT 5`,
       [ano],
     ),
     query('SELECT DISTINCT ano_letivo FROM turma ORDER BY ano_letivo DESC'),
-    historico.listar({ ano_letivo: ano, limite: 8 }),
+    historico.listar({ ano_letivo: ano, limite: 5 }),
   ]);
 
   const contar = (rows, chave, valor) => rows.find((r) => r[chave] === valor)?.total ?? 0;
