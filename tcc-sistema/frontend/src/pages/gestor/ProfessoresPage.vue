@@ -87,29 +87,34 @@
       </template>
       <template #body-cell-acoes="props">
         <q-td :props="props" auto-width>
-          <q-btn
-            v-if="props.row.status_cadastro !== 'APROVADO'"
-            color="secondary"
-            unelevated
-            no-caps
-            dense
-            icon="fact_check"
-            label="Validar"
-            class="q-px-sm q-mr-xs"
-            @click="abrir('validar', props.row)"
-          />
-          <q-btn flat round dense icon="edit" color="primary" @click="abrir('editar', props.row)"
-            ><q-tooltip>Editar</q-tooltip></q-btn
-          >
-          <q-btn
-            flat
-            round
-            dense
-            icon="delete"
-            color="negative"
-            @click="confirmarExclusao(props.row)"
-            ><q-tooltip>Excluir cadastro</q-tooltip></q-btn
-          >
+          <div class="acoes-linha">
+            <!-- espaço reservado: mantém editar/excluir alinhados mesmo sem o botão Validar -->
+            <div class="acoes-validar">
+              <q-btn
+                v-if="props.row.status_cadastro !== 'APROVADO'"
+                color="secondary"
+                unelevated
+                no-caps
+                dense
+                icon="fact_check"
+                label="Validar"
+                class="q-px-sm"
+                @click="abrir('validar', props.row)"
+              />
+            </div>
+            <q-btn flat round dense icon="edit" color="primary" @click="abrir('editar', props.row)"
+              ><q-tooltip>Editar</q-tooltip></q-btn
+            >
+            <q-btn
+              flat
+              round
+              dense
+              icon="delete"
+              color="negative"
+              @click="confirmarExclusao(props.row)"
+              ><q-tooltip>Excluir cadastro</q-tooltip></q-btn
+            >
+          </div>
         </q-td>
       </template>
     </q-table>
@@ -154,68 +159,72 @@
                 :rules="[obrigatorio]"
                 lazy-rules="ondemand"
               />
-              <div class="row q-col-gutter-md">
-                <div class="col-12 col-sm-6">
-                  <q-input
-                    v-model="form.matricula"
-                    label="Matrícula *"
-                    outlined
-                    dense
-                    :rules="[obrigatorio]"
-                    lazy-rules="ondemand"
-                  />
-                </div>
-                <div class="col-12 col-sm-6">
-                  <q-input
-                    v-model="form.senha"
-                    type="password"
-                    :label="dialogo.modo === 'criar' ? 'Senha inicial *' : 'Nova senha (opcional)'"
-                    outlined
-                    dense
-                    autocomplete="new-password"
-                    :rules="dialogo.modo === 'criar' ? [obrigatorio] : []"
-                    lazy-rules="ondemand"
-                  />
+              <div>
+                <div class="row q-col-gutter-md">
+                  <div class="col-12 col-sm-6">
+                    <q-input
+                      v-model="form.matricula"
+                      label="Matrícula *"
+                      outlined
+                      dense
+                      :rules="[obrigatorio]"
+                      lazy-rules="ondemand"
+                    />
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <q-input
+                      v-model="form.senha"
+                      type="password"
+                      :label="dialogo.modo === 'criar' ? 'Senha inicial *' : 'Nova senha (opcional)'"
+                      outlined
+                      dense
+                      autocomplete="new-password"
+                      :rules="dialogo.modo === 'criar' ? [obrigatorio] : []"
+                      lazy-rules="ondemand"
+                    />
+                  </div>
                 </div>
               </div>
             </template>
 
-            <div class="row q-col-gutter-md">
-              <div class="col-12 col-sm-4">
-                <q-input
-                  v-model="form.regime_carga_horaria"
-                  type="number"
-                  min="1"
-                  :label="
-                    dialogo.modo === 'editar' ? 'Regime (aulas/sem.)' : 'Regime (aulas/sem.) *'
-                  "
-                  outlined
-                  dense
-                  :rules="dialogo.modo === 'editar' ? [] : [obrigatorio]"
-                  lazy-rules="ondemand"
-                  hint="Ex.: 20 ou 40"
-                />
-              </div>
-              <div class="col-12 col-sm-4">
-                <q-input
-                  v-model="form.classificacao"
-                  type="number"
-                  min="1"
-                  label="Classificação"
-                  outlined
-                  dense
-                  hint="1 = melhor"
-                />
-              </div>
-              <div class="col-12 col-sm-4">
-                <q-input
-                  v-model="form.data_chegada_unidade"
-                  type="date"
-                  label="Chegada à unidade"
-                  stack-label
-                  outlined
-                  dense
-                />
+            <div>
+              <div class="row q-col-gutter-md">
+                <div class="col-12 col-sm-4">
+                  <q-input
+                    v-model="form.regime_carga_horaria"
+                    type="number"
+                    min="1"
+                    :label="
+                      dialogo.modo === 'editar' ? 'Regime (aulas/sem.)' : 'Regime (aulas/sem.) *'
+                    "
+                    outlined
+                    dense
+                    :rules="dialogo.modo === 'editar' ? [] : [obrigatorio]"
+                    lazy-rules="ondemand"
+                    hint="Ex.: 20 ou 40"
+                  />
+                </div>
+                <div class="col-12 col-sm-4">
+                  <q-input
+                    v-model="form.classificacao"
+                    type="number"
+                    min="1"
+                    label="Classificação"
+                    outlined
+                    dense
+                    hint="1 = melhor"
+                  />
+                </div>
+                <div class="col-12 col-sm-4">
+                  <q-input
+                    v-model="form.data_chegada_unidade"
+                    type="date"
+                    label="Chegada à unidade"
+                    stack-label
+                    outlined
+                    dense
+                  />
+                </div>
               </div>
             </div>
 
@@ -451,3 +460,19 @@ async function enviarCadastro() {
   }
 }
 </script>
+
+<style scoped>
+.acoes-linha {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 4px;
+}
+
+.acoes-validar {
+  width: 100px;
+  display: flex;
+  justify-content: flex-end;
+}
+</style>

@@ -2,7 +2,7 @@
   <q-page class="page">
     <PageHeader
       title="Vagas"
-      subtitle="Cada vaga é uma disciplina em uma turma, com a quantidade de aulas semanais. Os horários são definidos depois, no SISGESC."
+      subtitle="Cada vaga é uma disciplina em uma turma, com a quantidade de aulas semanais."
     />
 
     <CrudTable

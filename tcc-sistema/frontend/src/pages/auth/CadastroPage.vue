@@ -23,24 +23,26 @@
         :rules="[obrigatorio]"
         lazy-rules="ondemand"
       />
-      <div class="row q-col-gutter-md">
-        <div class="col-12 col-sm-6">
-          <q-input
-            v-model="form.matricula"
-            label="Matrícula *"
-            outlined
-            :rules="[obrigatorio]"
-            lazy-rules="ondemand"
-          />
-        </div>
-        <div class="col-12 col-sm-6">
-          <q-input
-            v-model="form.data_chegada_unidade"
-            type="date"
-            label="Chegada à unidade"
-            stack-label
-            outlined
-          />
+      <div>
+        <div class="row q-col-gutter-md">
+          <div class="col-12 col-sm-6">
+            <q-input
+              v-model="form.matricula"
+              label="Matrícula *"
+              outlined
+              :rules="[obrigatorio]"
+              lazy-rules="ondemand"
+            />
+          </div>
+          <div class="col-12 col-sm-6">
+            <q-input
+              v-model="form.data_chegada_unidade"
+              type="date"
+              label="Chegada à unidade"
+              stack-label
+              outlined
+            />
+          </div>
         </div>
       </div>
       <q-input
