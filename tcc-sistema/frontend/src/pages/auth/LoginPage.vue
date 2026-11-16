@@ -1,7 +1,6 @@
 <template>
   <div>
-    <h2 class="text-h5 text-weight-medium q-mt-none q-mb-xs text-primary">Entrar</h2>
-    <p class="text-muted q-mb-lg">Acesse com o e-mail e a senha cadastrados.</p>
+    <h2 class="text-h5 text-weight-medium text-center q-mt-none q-mb-lg text-primary">Entrar</h2>
 
     <q-banner v-if="$route.query.expirou" rounded class="bg-orange-1 text-orange-10 q-mb-md">
       Sua sessão expirou. Faça login novamente.
