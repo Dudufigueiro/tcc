@@ -104,27 +104,34 @@
           </template>
           <template #body-cell-acoes="props">
             <q-td :props="props" auto-width>
-              <q-btn
-                v-if="props.row.status === 'EM_DISPUTA'"
-                color="secondary"
-                unelevated
-                no-caps
-                dense
-                icon="check"
-                label="Confirmar"
-                class="q-px-sm q-mr-xs"
-                @click="confirmar(props.row)"
-              />
-              <q-btn
-                v-if="props.row.status !== 'CANCELADA'"
-                flat
-                no-caps
-                dense
-                color="negative"
-                icon="cancel"
-                label="Cancelar"
-                @click="cancelar(props.row)"
-              />
+              <div class="acoes-linha">
+                <!-- espaços reservados: mantêm Confirmar e Cancelar alinhados em todas as linhas -->
+                <div class="acoes-confirmar">
+                  <q-btn
+                    v-if="props.row.status === 'EM_DISPUTA'"
+                    color="secondary"
+                    unelevated
+                    no-caps
+                    dense
+                    icon="check"
+                    label="Confirmar"
+                    class="q-px-sm"
+                    @click="confirmar(props.row)"
+                  />
+                </div>
+                <div class="acoes-cancelar">
+                  <q-btn
+                    v-if="props.row.status !== 'CANCELADA'"
+                    flat
+                    no-caps
+                    dense
+                    color="negative"
+                    icon="cancel"
+                    label="Cancelar"
+                    @click="cancelar(props.row)"
+                  />
+                </div>
+              </div>
             </q-td>
           </template>
         </q-table>
@@ -574,3 +581,25 @@ async function registrarEmNome() {
   }
 }
 </script>
+
+<style scoped>
+.acoes-linha {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 4px;
+}
+
+.acoes-confirmar {
+  width: 110px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.acoes-cancelar {
+  width: 100px;
+  display: flex;
+  justify-content: flex-start;
+}
+</style>
